@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" ng-app="toilet">
+	
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75, user-scalable=no" />
+	<meta name="HandheldFriendly" content="true" />
+	
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/angular-animate.min.js"></script>
+		<script type="text/javascript" src="js/socket.io.min.js"></script>
+		<script type="text/javascript" src="js/twixt.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		
+		<title>Thought Toilet</title>
+	</head>
+
+	<body ng-controller="ToiletController as toiletCtrl">
+		
+		<!-- Title and logo -->
+		<header class="icon icon-logo3">
+			Thought Toilet
+		</header>
+		
+		<!-- Trends list -->
+		<div id="aside_bg"></div>
+		<aside>
+			<div id="trends_header">Current trends:<br></div>
+			<div id="trends_loading" ng-show="trends.length == 0">Loading...<br><br></div>
+			<button class="trend_button" ng-click="toiletCtrl.trend_select(trend)" ng-repeat="trend in trends">{{trend}}</button>
+		</aside>
+		
+		<!--Info box-->
+		<div id="info_box_container" ng-show="showInfoBox">
+			<div id="info_box">{{infoBoxMessage}}</div>
+		</div>
+		
+		<!-- Main content -->
+		<article>
+			<div id="welcome" ng-show="state == 'STATE_WELCOME'">
+				<div id="welcome_main">
+					Welcome to Thought Toilet, where you can witness the popular ideations of humanity spark into life, only to be washed away instantly, down the smelly drainpipe of time.<br><br>
+					To begin, choose a currently trending topic from the list.<br><br>
+					Or... <a ng-click="toiletCtrl.trend_choose()">choose a topic for me</a>.<br><br>
+				</div>
+				<div id="welcome_extra">
+					Made by: <a href="http://akineticblog.com/" target="_blank">Adam Vernon</a>.<br><br>
+					Made using: <a href="https://dev.twitter.com/" target="_blank">the Twitter API</a>, <a href="http://nodejs.org/" target="_blank">Node.js</a> and <a href="https://angularjs.org/" target="_blank">AngularJS</a>.
+				</div>
+			</div>
+			<div id="spiral_root" ng-show="(state == 'STATE_PLAYING_TWEETS') || (state == 'STATE_PAUSING_TWEETS') || (state == 'STATE_CHANGING_TOPIC')">
+				<img src="img/spiral.png" class="spiral_bg" ng-class="state=='STATE_PAUSING_TWEETS' ? 'animation_paused' : ''" width="817px" height="815px"/>
+				<a ng-repeat="tweet in tweets" href="{{tweet.link}}" target="_blank" >
+					<section class="tweet_box" id="{{'box'+tweet.tInc}}">
+						<img src="{{tweet.user_image}}" class="profile_img" width="128px" height="128px"/>
+						<p class="tweet_text">
+							<div class="tweet_title"><span class="screen_name">{{tweet.user_name}}</span> <span class="user_name">@{{tweet.user_id}}</span></div>
+							<div class="tweet_body">{{tweet.text}}</div>
+							<div class="tweet_time">Tweeted: {{tweet.time}}</div>
+						<p>
+					</section>
+				</a>
+			</div>
+		</article>
+		
+		<!-- App status footer -->
+		<footer ng-show="(chosenTrend != '____NONE____') && ((state == 'STATE_PLAYING_TWEETS') || (state == 'STATE_PAUSING_TWEETS'))" >
+			{{(state == 'STATE_PAUSING_TWEETS' ? ("(Tweets paused) ") : "")}} Topic: {{chosenTrend + (stillTrending ? "" : " (no-longer trending)")}}
+		</footer>
+		
+		<!-- Playback control -->
+		<div id="playback_button" ng-click="toiletCtrl.playPause_toggle()" ng-show="(state == 'STATE_PLAYING_TWEETS') || (state == 'STATE_PAUSING_TWEETS')">
+			<div class="icon-playback-play no_transition" ng-show="state == 'STATE_PAUSING_TWEETS'"></div>
+			<div class="icon-playback-pause  no_transition" ng-show="state != 'STATE_PAUSING_TWEETS'"></div>
+		</div>
+		
+	</body>
+
+</html>
