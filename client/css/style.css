@@ -380,6 +380,10 @@ footer {
 @media (max-width: 850px) {
 	header {
 		margin-top: 0px;
+		height: 60px;
+		width: 100%;
+		font-size: 26.5px;
+		line-height: 40px;
 	}
 	#aside_bg {
 		display: none;
@@ -387,8 +391,19 @@ footer {
 	aside {
 		background-color: #5FAD9D;
 		width: 100%;
-		padding-right: 15px;
+		padding: 10px;
+		font-size: 15px;
 		float: none;
+	}
+	#trends_header {
+		padding-bottom: 5px;
+	}
+	.trend_button {
+		font-size: 12px;
+		padding: 2px;
+		padding-left: 4px;
+		padding-right: 4px;
+		margin: 1px;
 	}
 	footer {
 		max-width: calc(100% - 85px);
