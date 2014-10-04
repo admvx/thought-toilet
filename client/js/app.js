@@ -8,7 +8,7 @@
 	const STATE_ERROR = "STATE_ERROR";
 	
 	//Config//
-	const serverAddress = "peaceful-hollows-8770.herokuapp.com";
+	const serverAddress = "";	//Add your node.js/socket.io server address here
 	
 	//Info copy//
 	const msgNotTrending = "Darn! That topic just stopped trending - please choose another";
