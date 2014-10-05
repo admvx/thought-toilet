@@ -167,7 +167,7 @@
 			if (lastTweet) $scope.tweet_removeFromArray(lastTweet);
 			$scope.stillTrending = true;
 			$scope.reportedSlow = false;
-			lastTime = Date.now();
+			lastTime = Date.now();			//Capture current time so that a 'slow topic' message isn't set prematurely
 			$scope.chosenTrend = $scope.nextTrend;
 			$scope.state = STATE_PLAYING_TWEETS;
 		};
@@ -179,7 +179,7 @@
 					$scope.state = STATE_PAUSING_TWEETS;
 					break;
 				case STATE_PAUSING_TWEETS:
-					lastTime = Date.now();
+					lastTime = Date.now();	//Capture current time so that a 'slow topic' message isn't set prematurely
 					$scope.state = STATE_PLAYING_TWEETS;
 					break;
 			}
@@ -188,16 +188,14 @@
 		//Show/hide status messages//
 		$scope.infoBox_show = function(message, delay) {
 			if (! delay) delay = 2000;
-			clearTimeout($scope.infoInterval);
+			$timeout.cancel($scope.infoInterval);
 			$scope.infoBoxMessage = message;
 			$scope.showInfoBox = true;
-			$scope.infoInterval = setTimeout($scope.infoBox_hide, delay);
+			$scope.infoInterval = $timeout($scope.infoBox_hide, delay);
 		};
 		$scope.infoBox_hide = function() {
-			console.log("huh");
-			clearTimeout($scope.infoInterval);
+			$timeout.cancel($scope.infoInterval);
 			$scope.showInfoBox = false;
-			$scope.$apply();
 		};
 		
 		//Check whether chosen trend stopped//
@@ -270,7 +268,9 @@
 		
 		//Animate all tweets in the spiral around due to a new tweet being added to the array//
 		$scope.tweets_animate = function() {
-			var tweets = $scope.tweets.slice().reverse();	//Traverse tweets array from newest to oldest
+			if ($scope.state == STATE_CHANGING_TOPIC) return;	//Don't overwrite 'flushing' tweens if they have been started
+			
+			var tweets = $scope.tweets.slice().reverse();		//Traverse tweets array from newest to oldest
 			
 			for (var i=0; i<tweets.length; i++) {
 				var tweet = tweets[i];
@@ -377,7 +377,7 @@
 	
 	//Set up DOM references and try to dectect whether a mobile device is being used, to enable 'lite' mode and load in fewer tweets at a time//
 	page_loaded = function() {
-		isLite = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
+		isLite = /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
 		spiralRootDomRef = window.document.getElementById("spiral_root");
 		asideRef = window.document.getElementsByTagName("aside")[0];
 		spiralRoot_position();
