@@ -8,7 +8,7 @@
 	const STATE_ERROR = "STATE_ERROR";
 	
 	//Config//
-	const serverAddress = "";	//Add your node.js/socket.io server address here
+	const serverAddress = "https://peaceful-hollows-8770.herokuapp.com";	//Add your node.js/socket.io server address here
 	
 	//Info copy//
 	const msgNotTrending = "Darn! That topic just stopped trending - please choose another";
@@ -244,7 +244,7 @@
 			
 			//Set initial data for tweet//
 			data.t.user_image = data.t.user_image.replace("_normal.", "_reasonably_small.");		//Load larger profile image
-			data.t.link = "http://twitter.com/" + data.t.user_id + "/status/" + data.t.tweet_id;	//Contrust link to individual tweet page
+			data.t.link = "https://twitter.com/" + data.t.user_id + "/status/" + data.t.tweet_id;	//Contrust link to individual tweet page
 			data.t.time = data.t.time.replace("+0000 ", "") + " UTC";								//Format time string
 			data.t.sProp = -0.01;									//Indicates proportion around spiral (0 > 1), set to a negative to indicate its pre-spiral position
 			data.t.opacity = 0;										//Initially transparent
