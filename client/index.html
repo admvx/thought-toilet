@@ -29,12 +29,12 @@
 		<aside>
 			<div id="trends_header">Current trends:<br></div>
 			<div id="trends_loading" ng-show="trends.length == 0">Loading...<br><br></div>
-			<button class="trend_button" ng-click="toiletCtrl.trend_select(trend)" ng-repeat="trend in trends">{{trend}}</button>
+			<button class="trend_button" ng-click="toiletCtrl.trend_select(trend)" ng-repeat="trend in trends" ng-bind="trend"></button>
 		</aside>
 		
 		<!--Info box-->
 		<div id="info_box_container" ng-show="showInfoBox">
-			<div id="info_box">{{infoBoxMessage}}</div>
+			<div id="info_box" ng-bind="infoBoxMessage"></div>
 		</div>
 		
 		<!-- Main content -->
@@ -46,19 +46,19 @@
 					Or... <a ng-click="toiletCtrl.trend_choose()">choose a topic for me</a>.<br><br>
 				</div>
 				<div id="welcome_extra">
-					Made by: <a href="http://akineticblog.com/" target="_blank">Adam Vernon</a>.<br><br>
+					Made by: <a href="http://admvx.com/" target="_blank">Adam Vernon</a>.<br><br>
 					Made using: <a href="https://dev.twitter.com/" target="_blank">the Twitter API</a>, <a href="http://nodejs.org/" target="_blank">Node.js</a> and <a href="https://angularjs.org/" target="_blank">AngularJS</a>.
 				</div>
 			</div>
 			<div id="spiral_root" ng-show="(state == 'STATE_PLAYING_TWEETS') || (state == 'STATE_PAUSING_TWEETS') || (state == 'STATE_CHANGING_TOPIC')">
 				<img src="img/spiral.png" class="spiral_bg" ng-class="state=='STATE_PAUSING_TWEETS' ? 'animation_paused' : ''" width="817px" height="815px"/>
-				<a ng-repeat="tweet in tweets" href="{{tweet.link}}" target="_blank" >
+				<a ng-repeat="tweet in tweets" ng-href="{{tweet.link}}" target="_blank" >
 					<section class="tweet_box" id="{{'box'+tweet.tInc}}">
-						<img src="{{tweet.user_image}}" class="profile_img" width="128px" height="128px"/>
+						<img ng-src="{{tweet.user_image}}" class="profile_img" width="128px" height="128px"/>
 						<p class="tweet_text">
-							<div class="tweet_title"><span class="screen_name">{{tweet.user_name}}</span> <span class="user_name">@{{tweet.user_id}}</span></div>
-							<div class="tweet_body">{{tweet.text}}</div>
-							<div class="tweet_time">Tweeted: {{tweet.time}}</div>
+							<div class="tweet_title"><span class="screen_name" ng-bind="tweet.user_name"></span> <span class="user_name" ng-bind="'@' + tweet.user_id"></span></div>
+							<div class="tweet_body" ng-bind="tweet.text"></div>
+							<div class="tweet_time" ng-bind="'Tweeted: ' + tweet.time"></div>
 						<p>
 					</section>
 				</a>
@@ -67,7 +67,9 @@
 		
 		<!-- App status footer -->
 		<footer ng-show="(chosenTrend != '____NONE____') && ((state == 'STATE_PLAYING_TWEETS') || (state == 'STATE_PAUSING_TWEETS'))" >
-			{{(state == 'STATE_PAUSING_TWEETS' ? ("(Tweets paused) ") : "")}} Topic: {{chosenTrend + (stillTrending ? "" : " (no-longer trending)")}}
+			<span ng-if="state == 'STATE_PAUSING_TWEETS'">(Tweets paused)</span>
+			Topic: <span ng-bind="chosenTrend"></span>
+			<span ng-if="! stillTrending">(no-longer trending)</span>
 		</footer>
 		
 		<!-- Playback control -->
